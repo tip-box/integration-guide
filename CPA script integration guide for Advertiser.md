@@ -1,4 +1,4 @@
-# trackerJS integration guide for Advertiser
+# TrackerJS integration guide for Advertiser
 
 ### Getting Started
 
