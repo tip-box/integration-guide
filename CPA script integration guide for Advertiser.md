@@ -18,7 +18,7 @@ head tag 내에 script를 로드합니다
 <script src="https://static.tip-box.kr/dist/tipbox-tracker.min.js"></script>
 <script>
     // Initialization
-    const tracker = new tracker({
+    const tracker = new Tracker({
         debug : true // true로 설정시 console에 로그를 출력합니다 (default:true)
     });
 </script>
