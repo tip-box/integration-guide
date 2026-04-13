@@ -3,6 +3,40 @@
 ### Getting Started
 
 - 본 가이드는 TIP-BOX와 매체사간의 S2S API 연동에 대한 내용입니다
+- 귀사의 앱/서비스에 TIP-BOX의 리워드 캠페인을 연동하여 사용자에게 캠페인을 노출하고, 참여 실적에 따라 리워드를 지급할 수 있습니다
+
+### 연동 흐름도
+
+```
+매체사                          TIP-BOX                         광고주
+  |                               |                               |
+  |  1. 캠페인 리스트 조회 요청      |                               |
+  | ----------------------------> |                               |
+  |  캠페인 리스트 응답              |                               |
+  | <---------------------------- |                               |
+  |                               |                               |
+  |  2. 캠페인 참여 요청            |                               |
+  | ----------------------------> |                               |
+  |  랜딩 URL + clickId 응답       |                               |
+  | <---------------------------- |                               |
+  |                               |                               |
+  |  3. 유저가 랜딩 URL로 이동      |                               |
+  | ------------------------------------------------------------> |
+  |                               |                               |
+  |                               |  4. 유저 미션 완료 후 포스트백    |
+  |                               | <---------------------------- |
+  |                               |                               |
+  |  5. 매체사 콜백 (실적 전송)     |                               |
+  | <---------------------------- |                               |
+  |  6. 유저에게 리워드 지급         |                               |
+  |                               |                               |
+```
+
+### Prerequisites
+
+- TIP-BOX 연동 담당자로부터 매체사 식별키(token)를 발급받아야 합니다
+- 실적 수신을 위한 콜백 URL을 TIP-BOX 담당자에게 전달해야 합니다
+
 ---
 # 1.캠페인 리스트 조회 API
 
@@ -22,7 +56,7 @@
 
 > 파라미터 및 응답 스펙은 두 API 동일합니다.
 
-- parameter : token (필수), p (필수)
+- parameter : token (필수), p (선택)
 
 
 | 항목       | 설명      | 필수 | 비고                                                                         |
@@ -231,6 +265,8 @@ camp -> detail_type 세부 항목
 | userAgent     | string  | User-Agent                       |                                                   |
 | callbackParam | string  | 매체사 정의 파라미터                     | 해당 파라미터에 값을 넣어 보내주시면 포스트백을 통해 다시 전달받을 수 있는 값입니다 |
 | affiliateId   | string  | 하위 매체 아이디                       |                                                   |
+| age           | int     | 유저 연령 정보                        | 연령 타겟팅 캠페인일 경우 필수                                |
+| gender        | int     | 유저 성별 정보                        | 0: 모름, 1: 남자, 2: 여자. 성별 타겟팅 캠페인일 경우 필수           |
 
 ### 응답
 | 항목              | 형태     | 설명              |
@@ -240,6 +276,19 @@ camp -> detail_type 세부 항목
 | message         | string | 응답 메시지          |
 | data.landingUrl | string | 캠페인 랜딩 URL      |
 | data.clickId    | string | 클릭 식별값          |
+
+#### 응답 예시
+```json
+{
+    "status": 200,
+    "code": "SUCCESS",
+    "message": "성공",
+    "data": {
+        "landingUrl": "https://example.com/campaign/landing?click_id=abc123",
+        "clickId": "abc123"
+    }
+}
+```
 
 ---
 # 3.CPI 설치 확인 API
@@ -259,22 +308,24 @@ camp -> detail_type 세부 항목
 3. 설치가 확인되면 매체사 서버로 실적 포스트백이 전송됩니다 (섹션 4 참고)
 
 ---
-# 4.실적 전송
+# 4.실적 전송 (콜백)
 
 - 캠페인을 정상적으로 참여 완료했을 때, 매체사 서버로 리워드 적립 요청을 보냅니다
   (폐사에서 직접 적립 처리하지 않습니다)
-- 리워드 적립 요청을 받을 콜백URL을 문서 최하단에 메일로 안내되어 있는 연동 담당자에게 전달합니다
+- 리워드 적립 요청을 받을 콜백 URL을 연동 담당자에게 전달합니다
+- 콜백은 HTTP GET 또는 POST 방식으로 전송됩니다 (매체사 설정에 따라 결정)
 
 #### 참고 : 방화벽 등 보안 설정이 되어 있는 경우 아래 정보를 허용해주세요
-- <code>도메인 : proxy.adbc.io</code>
+- <code>도메인 : proxy.tipbox.kr</code>
 - <code>허용할 IP : 15.165.252.33</code>
 
+### 4-1. 기본 매크로
 
-### 매크로
+TIP-BOX에서 실적 전송 시 아래 매크로 값을 치환하여 전달합니다.
 
 | 항목           | 형태          | 설명                           | 비고       |
 |--------------|-------------|------------------------------|----------|
-| cbparam      | string(255) | 캠페인 참여시 보냈던 cbparam값         |          |
+| cbparam      | string(255) | 캠페인 참여시 보냈던 callbackParam값   |          |
 | tid          | string(38)  | 실적에 대한 유니크값 (transaction ID) |          |
 | subpid       | string(100) | 하위 매체 구분값                    | optional |
 | userid       | string(100) | 참여 유저 식별값                    |          |
@@ -282,11 +333,140 @@ camp -> detail_type 세부 항목
 | price        | float(11,1) | 수익금                          |          |
 | price_dollar | float(11,3) | 달러 수익금                       |          |
 
+#### 기본 매크로 예시
 
-### 예시
-
+```
 https://postback.com?clk_id={cbparam}&tid={tid}&aff_id={subpid}&uid={userid}&cid={campid}&price={price}
+```
 
+### 4-2. 동적 콜백 매크로
+
+TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설정할 수 있습니다.
+매체사의 콜백 URL과 매크로 매핑은 TIP-BOX 어드민에서 설정되며, 아래의 매크로를 사용할 수 있습니다.
+
+> 동적 콜백 매크로를 사용하면 매체사의 기존 콜백 스펙에 맞추어 파라미터명과 값을 자유롭게 매핑할 수 있습니다.
+> 기본 매크로와 동적 콜백 매크로 중 하나를 선택하여 사용합니다. 동적 콜백 매크로 설정 시 연동 담당자에게 문의해주세요.
+
+#### 사용 가능한 매크로 목록
+
+**식별 정보**
+
+| 매크로명        | 설명                    |
+|---------------|-----------------------|
+| clickId       | 클릭 트래킹 ID            |
+| userId        | 참여 유저 식별값             |
+| affiliateId   | 하위 매체 아이디             |
+| mediaId       | 매체 계정 ID              |
+| deviceAdid    | 광고 식별자 (ADID/IDFA)    |
+| callbackParam | 매체사 정의 파라미터           |
+
+**캠페인 정보**
+
+| 매크로명          | 설명                   |
+|----------------|----------------------|
+| campaignId     | 캠페인 ID               |
+| adGroupId      | 광고그룹 ID              |
+| adFormat       | 광고 형식 (OFFERWALL, DISPLAY) |
+| adType         | 광고 유형 (quest, survey, download 등) |
+| mediaName      | 매체사명                 |
+
+**금액 정보**
+
+| 매크로명          | 설명                   |
+|----------------|----------------------|
+| rewardPrice    | 리워드 단가               |
+| contractPrice  | 계약 단가 (원)            |
+| userPrice      | 유저 지급 금액 (원)         |
+| userPoint      | 유저 지급 포인트            |
+| profit         | 플랫폼 수익               |
+
+**디바이스 정보**
+
+| 매크로명         | 설명                   |
+|---------------|----------------------|
+| ip            | 참여 단말기 IP             |
+| osType        | OS 유형 (ANDROID, IOS)  |
+| platform      | 플랫폼 (osType과 동일)     |
+| osVersion     | OS 버전                |
+| deviceModel   | 단말기 모델               |
+| deviceBrand   | 단말기 제조사              |
+| deviceCarrier | 통신사                  |
+| deviceNetwork | 네트워크 타입              |
+| userAgent     | User-Agent            |
+
+**유저 정보**
+
+| 매크로명   | 설명     |
+|---------|--------|
+| age     | 유저 연령  |
+| gender  | 유저 성별  |
+
+**기타**
+
+| 매크로명           | 설명                   |
+|-----------------|----------------------|
+| clickTimestamp   | 클릭 시각 (KST epoch)   |
+
+#### 동적 매크로 매핑 방식
+
+매크로 매핑은 JSON 형태로 설정되며, 두 가지 방식을 지원합니다.
+
+**1) 단순 매핑** : 매크로 값을 그대로 파라미터에 전달
+
+```json
+{
+  "userId": "uid",
+  "clickId": "click_id",
+  "profit": "pft"
+}
+```
+- 형식 : `"매크로명": "파라미터명"`
+- 위 설정시 콜백 URL에 `uid={userId값}&click_id={clickId값}&pft={profit값}` 형태로 전달됩니다
+
+**2) 열거형 매핑** : 매크로 값을 매체사에서 사용하는 코드값으로 변환하여 전달
+
+```json
+{
+  "osType": {
+    "paramName": "os",
+    "values": {
+      "IOS": "1",
+      "ANDROID": "2"
+    }
+  }
+}
+```
+- 형식 : `"매크로명": { "paramName": "파라미터명", "values": { "원래값": "변환값" } }`
+- 위 설정시 OS가 IOS인 경우 `os=1`, ANDROID인 경우 `os=2`로 전달됩니다
+
+#### 동적 매크로 설정 예시
+
+아래는 매체사 콜백 URL과 매크로 매핑의 전체 예시입니다.
+
+**콜백 URL** : `https://publisher.com/callback`
+
+**매크로 매핑 설정** :
+```json
+{
+  "userId": "uid",
+  "clickId": "click_id",
+  "campaignId": "cid",
+  "rewardPrice": "price",
+  "callbackParam": "cb",
+  "osType": {
+    "paramName": "os",
+    "values": {
+      "IOS": "1",
+      "ANDROID": "2"
+    }
+  }
+}
+```
+
+**실제 전송되는 콜백 URL** :
+```
+https://publisher.com/callback?uid=user123&click_id=663f1a2b3c4d5e6f&cid=12345&price=100&cb=my_param&os=2
+```
 
 ---
 ## 공통
@@ -313,7 +493,5 @@ https://postback.com?clk_id={cbparam}&tid={tid}&aff_id={subpid}&uid={userid}&cid
 ## Authors
 
 * **CHOI BAWOO** - *Integration technical support* - bw@adbc.co.kr
-
-
 
 
