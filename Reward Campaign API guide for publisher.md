@@ -78,7 +78,7 @@
 | camp.bm               | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)      |
 | camp.sub_type         | int           | 캠페인 하위 유형                              | 0: 기본, 1: 플레이스 저장하기, 2: 퀴즈맞추기, 3: 스토어상품찜, 4: 알림받기, 5: 유튜브, 6: SNS |
 | camp.answer_type      | int           | 정답 제출 방식                               | *아래 표 참고                                                           |
-| camp.ad_category      | string(10)    | 캠페인의 카테고리                              | *아래 표 참고                                                           |
+| camp.ad_category      | string(10)    | 광고 소스 유형                               | TIP_ADS, API, S2S, ADMOB, ADFIT                                    |
 | camp.package          | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url                             |
 | camp.price            | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                                |
 | camp.price_dollar     | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                              |
@@ -102,16 +102,6 @@
 | camp.ctv              | array         | 아이콘 이미지를 제외한 가로형, 세로형 소재 정보를 포함하고 있습니다 | 세부 항목 참고                                                           |
 
 > `@JsonInclude(NON_NULL)` 적용 — 값이 없는 항목은 응답에서 제외됩니다.
-
-camp -> ad_category 세부 항목
-
-| 카테고리 값 | 설명     |
-|--------|--------|
-| 01     | 보험     |
-| 02     | 금융     |
-| 03     | 자동차 보험 |
-| 04     | 카드     |
-| 99     | 기타     |
 
 camp -> ctv 세부 항목
 
