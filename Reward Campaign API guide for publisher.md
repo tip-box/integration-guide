@@ -3,7 +3,7 @@
 ### Getting Started
 
 - 본 가이드는 TIP-BOX와 매체사 API 연동에 대한 내용입니다
-- 귀사의 앱/서비스에 TIP-BOX의 리워드 캠페인을 연동하여 사용자에게 캠페인을 노출하고, 참여 실적에 따라 리워드를 지급할 수 있습니다
+- TIP-BOX의 리워드 캠페인을 연동하여 사용자에게 캠페인을 노출하고, 참여 실적에 따라 리워드를 지급할 수 있습니다
 
 ### 연동 흐름도
 
@@ -73,7 +73,6 @@ sequenceDiagram
 | camp.os               | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                                  |
 | camp.name             | string(255)   | 캠페인명                                   |                                                                    |
 | camp.bm               | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)      |
-| camp.sub_type         | int           | 캠페인 하위 유형                              | 0: 기본, 1: 플레이스 저장하기, 2: 퀴즈맞추기, 3: 스토어상품찜, 4: 알림받기, 5: 유튜브, 6: SNS |
 | camp.answer_type      | int           | 정답 제출 방식                               | *아래 표 참고                                                           |
 | camp.ad_category      | string(10)    | 광고 소스 유형                               | TIP_ADS, API, S2S, ADMOB, ADFIT                                    |
 | camp.package          | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url                             |
@@ -146,7 +145,6 @@ camp -> answer_type 세부 항목
           "adGroupId": 415405,
           "name": "A 강남역 맛집 우대포 강남역점 육회 명소 퀴즈맞추기",
           "bm": 1,
-          "sub_type": 2,
           "answer_type": 201,
           "price": 20,
           "price_dollar": 0.014,
@@ -178,7 +176,6 @@ camp -> answer_type 세부 항목
             "adGroupId": 405080,
             "name": "목포 맛집 목포관광오리탕 오리탕 저장하기",
             "bm": 1,
-            "sub_type": 1,
             "answer_type": 101,
             "price": 19,
             "price_dollar": 0.013,
@@ -297,7 +294,7 @@ camp -> answer_type 세부 항목
 1. 매체사가 캠페인 참여 요청 API를 호출하면, 응답으로 앱스토어 랜딩 URL이 전달됩니다
 2. 유저가 앱을 설치하면, 광고주 네트워크에서 설치를 자동으로 감지합니다
 3. 광고주 네트워크가 TIP-BOX로 설치 완료 포스트백을 발송합니다
-4. TIP-BOX가 전환 기준(ConversionCriteria)과 매칭하여 설치를 확인합니다
+4. TIP-BOX가 전환 기준과 매칭하여 설치를 확인합니다
 5. 설치가 확인되면 매체사 서버로 실적 콜백이 전송됩니다 (섹션 4 참고)
 
 ---
