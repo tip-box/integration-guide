@@ -225,11 +225,24 @@ camp -> answer_type 세부 항목
 - production API url : https://reward.tipbox.kr/api/participate
 - test API url : https://dev.qtbit.co.kr:8436/api/participate
 
+> **매크로 매핑 기반 파라미터 전달**
+>
+> 참여 요청 API는 콜백과 동일하게 매체 어드민의 **채널 관리 > 매크로 설정**에서 구성한 매크로 매핑에 따라 파라미터가 처리됩니다.
+> 매체사는 자사 시스템의 파라미터명으로 값을 전달하면, TIP-BOX가 매크로 매핑 설정에 따라 내부 필드로 자동 변환합니다.
+>
+> 예를 들어, 매크로 매핑에서 `"userId": "uid"` 로 설정한 경우:
+> ```
+> /api/participate?channelKey=xxx&uid=user123&adGroupId=415405&...
+> ```
+> `uid` 파라미터가 내부적으로 `userId`로 매핑됩니다.
+
 #### 필수 파라미터
+
+아래는 내부적으로 매핑되어야 하는 필수 필드 목록입니다. 실제 Query Parameter명은 매크로 매핑 설정에 따라 달라질 수 있습니다.
 
 | 항목         | 형태     | 필수 | 설명                                   |
 |------------|--------|------|--------------------------------------|
-| channelKey | string | O    | 매체사 채널 식별키 (매체 어드민에서 발급)            |
+| channelKey | string | O    | 매체사 채널 식별키 (매체 어드민에서 발급). 매크로 매핑 대상이 아닌 고정 파라미터입니다 |
 | userId     | string | O    | 참여 유저 식별값                            |
 | adGroupId  | long   | O    | 광고그룹 식별값                             |
 | ip         | string | O    | 참여 단말기 IP                            |
