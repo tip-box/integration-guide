@@ -334,7 +334,7 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 | campaignId     | 캠페인 ID               |
 | adGroupId      | 광고그룹 ID              |
 | adFormat       | 광고 형식 (OFFERWALL, DISPLAY) |
-| adType         | 광고 유형 (quest, survey, download 등) |
+| adType         | 광고 유형 (CPI, CPE, CPA, MISSION, CPS, CPC, CPV, CPM) |
 | mediaName      | 매체사명                 |
 
 **금액 정보**
