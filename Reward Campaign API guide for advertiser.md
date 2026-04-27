@@ -151,11 +151,29 @@ https://postback.tipbox.kr/api/postback?clickId=abc123&callbackParam=tx_001&pric
 
 ### 응답
 
-| 항목     | 형태     | 설명       |
-|--------|--------|----------|
-| status | int    | HTTP 상태 코드 |
-| code   | string | 응답 코드    |
-| message | string | 응답 메시지   |
+> 포스트백 API는 모든 케이스에 대해 **HTTP 200**을 반환하며, 처리 결과는 응답 body의 `status` / `code` 필드로 구분합니다.
+
+| 항목      | 형태     | 설명                      |
+|---------|--------|-------------------------|
+| status  | int    | 처리 결과 코드 (200=성공, 그 외 실패) |
+| code    | string | 응답 코드 (예: `OK`, `NOT_FOUND_REWARD_DOC`) |
+| message | string | 응답 메시지                  |
+| data    | object | 처리 상세 (성공 시에만 포함)        |
+
+#### 처리 결과 코드 (status)
+
+| status | code                       | 설명                                                           |
+|--------|----------------------------|--------------------------------------------------------------|
+| 200    | `OK`                       | 정상 처리 (매체 콜백 성공/실패 여부는 `data.statusCode` 로 확인)               |
+| 400    | `VALIDATION_FAILED`        | 필수 파라미터 누락 (`clickId`, `eventType` 등)                         |
+| 400    | `INVALID_PARAMETER`        | `clickId` 형식 오류 (ObjectId 형식이 아님)                             |
+| 400    | `INVALID_JSON`             | 요청 body JSON 파싱 실패                                            |
+| 405    | `NOT_FOUND_REWARD_DOC`     | 해당 `clickId`의 참여(RewardDoc) 정보를 찾을 수 없음                       |
+| 405    | `INVALID_CLICK_ID`         | 유효하지 않은 `clickId` 형식                                          |
+| 429    | `EVENTS_LIMIT_EXCEEDED`    | 단일 클릭에 누적된 이벤트가 최대 개수(100개)를 초과                              |
+| 501    | `DUPLICATE_EVENT`          | 이미 성공 처리된 전환(conversion) 이벤트가 존재 (중복 포스트백)                    |
+| 500    | `INTERNAL_SERVER_ERROR`    | 서버 내부 오류                                                      |
+| 900    | `POSTBACK_PROCESSING_FAILED` | 포스트백 처리 중 알 수 없는 오류 발생                                      |
 
 #### 포스트백 응답 예시
 
@@ -163,17 +181,42 @@ https://postback.tipbox.kr/api/postback?clickId=abc123&callbackParam=tx_001&pric
 ```json
 {
     "status": 200,
-    "code": "SUCCESS",
-    "message": "성공"
+    "code": "OK",
+    "message": "ok",
+    "data": {
+        "success": true,
+        "postbackSent": true,
+        "statusCode": 200
+    }
 }
 ```
+
+> `data.statusCode` 는 TIP-BOX → 매체로 전송된 콜백의 HTTP 상태 코드입니다. (200~299: 매체 콜백 성공)
 
 **실패 - 참여 이력 없음**
 ```json
 {
+    "status": 405,
+    "code": "NOT_FOUND_REWARD_DOC",
+    "message": "RewardDoc을 찾을 수 없습니다."
+}
+```
+
+**실패 - 중복 포스트백**
+```json
+{
+    "status": 501,
+    "code": "DUPLICATE_EVENT",
+    "message": "이미 성공한 conversion 이벤트가 존재합니다."
+}
+```
+
+**실패 - 필수 파라미터 누락**
+```json
+{
     "status": 400,
-    "code": "PARTICIPATE_NOT_FOUND",
-    "message": "참여 이력을 찾을 수 없습니다"
+    "code": "VALIDATION_FAILED",
+    "message": "clickId는 필수입니다"
 }
 ```
 
