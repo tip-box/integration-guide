@@ -132,14 +132,14 @@ assetMapping       : {"icon": "iconurl"}
 - 사용자가 정상적으로 미션에 참여해 전환이 완료된 경우 TIP-BOX로 포스트백을 발송합니다
 - method : GET
 - TIP-BOX postback URL : `https://postback.tipbox.kr/api/postback`
-  - adFormat : `offerwall` 또는 `display`
-  - network : 연동 담당자가 안내하는 귀사의 네트워크명
+
+> 포스트백 발송에 필요한 파라미터가 있으면 연동 담당자에게 요청해주세요.
 
 ### 파라미터
 
 | 항목            | 형태     | 설명                               | 필수 |
 |---------------|--------|----------------------------------|----|
-| clickId       | string | 캠페인 참여시 전달받은 참여 식별 파라미터 (clickId) | O  |
+| clickId       | string | 캠페인 참여시 전달받은 참여 식별 파라미터 | O  |
 | callbackParam | string | 귀사가 관리하는 트랜잭션 ID                 | O  |
 | price         | int    | 수익금 (원)                          |    |
 
