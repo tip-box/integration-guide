@@ -131,24 +131,22 @@ assetMapping       : {"icon": "iconurl"}
 
 - 사용자가 정상적으로 미션에 참여해 전환이 완료된 경우 TIP-BOX로 포스트백을 발송합니다
 - method : GET
-- TIP-BOX postback URL : `https://postback.tipbox.kr/api/{adFormat}/ads/reward/{network}`
+- TIP-BOX postback URL : `https://postback.tipbox.kr/api/postback`
   - adFormat : `offerwall` 또는 `display`
   - network : 연동 담당자가 안내하는 귀사의 네트워크명
 
 ### 파라미터
 
-| 항목     | 형태     | 설명                               | 필수 |
-|--------|--------|----------------------------------|----|
-| cbparam | string | 캠페인 참여시 전달받은 참여 식별 파라미터 (clickId) | O  |
-| tid    | string | 귀사가 관리하는 트랜잭션 ID                 | O  |
-| userid | string | 참여 유저 식별값                        |    |
-| campid | int    | 캠페인 식별값                          |    |
-| price  | int    | 수익금 (원)                          |    |
+| 항목            | 형태     | 설명                               | 필수 |
+|---------------|--------|----------------------------------|----|
+| clickId       | string | 캠페인 참여시 전달받은 참여 식별 파라미터 (clickId) | O  |
+| callbackParam | string | 귀사가 관리하는 트랜잭션 ID                 | O  |
+| price         | int    | 수익금 (원)                          |    |
 
 ### 예시
 
 ```
-https://postback.tipbox.kr/api/offerwall/ads/reward/my_company?cbparam=abc123&tid=tx_001&userid=user123&campid=12345&price=100
+https://postback.tipbox.kr/api/postback?clickId=abc123&callbackParam=tx_001&price=100
 ```
 
 ### 응답
