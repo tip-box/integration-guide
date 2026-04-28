@@ -97,7 +97,6 @@ sequenceDiagram
 | camp.iconurl          | string(255)   | 캠페인의 아이콘 이미지 url                       |                                                                    |
 | camp.ctv              | array         | 아이콘 이미지를 제외한 가로형, 세로형 소재 정보를 포함하고 있습니다 | 세부 항목 참고                                                           |
 
-> `@JsonInclude(NON_NULL)` 적용 — 값이 없는 항목은 응답에서 제외됩니다.
 
 camp -> ctv 세부 항목
 
