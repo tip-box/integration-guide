@@ -42,12 +42,12 @@ sequenceDiagram
 
 ### 1-1. 오퍼월 캠페인 리스트 조회 API
 
-- production API url : https://ad.tipbox.kr/api/v1/reward/offerwall/campaigns
+- production API url : https://ad.tip-box.kr/api/v1/reward/offerwall/campaigns
 - test API url : http://dev.qtbit.co.kr:8037/api/v1/reward/offerwall/campaigns
 
 ### 1-2. DA(디스플레이) 캠페인 리스트 조회 API
 
-- production API url : https://ad.tipbox.kr/api/v1/reward/display/campaigns
+- production API url : https://ad.tip-box.kr/api/v1/reward/display/campaigns
 - test API url : http://dev.qtbit.co.kr:8037/api/v1/reward/display/campaigns
 
 > 파라미터 및 응답 스펙은 두 API 동일합니다.
@@ -60,7 +60,7 @@ sequenceDiagram
 | channelKey | 매체사 채널 식별키 | O  | 매체 어드민에서 채널 승인 시 발급                                                       |
 | p        | 플랫폼     |    | 기본 값은 전체이며, 구분하여 받을 경우 Android : 1, iOS : 2로 요청                            |
 | category | 카테고리    |    | 기본 값은 전체이며, 구분하여 받을 경우 보험 : 01, 금융 : 02, 자동차보험 : 03, 카드 : 04, 기타 : 99로 요청 |
-- 요청 예시 : https://ad.tipbox.kr/api/v1/reward/offerwall/campaigns?channelKey={channelKey}
+- 요청 예시 : https://ad.tip-box.kr/api/v1/reward/offerwall/campaigns?channelKey={channelKey}
 
 
 
@@ -214,7 +214,7 @@ camp -> answer_type 세부 항목
 
 ### 요청
 - method : GET
-- production API url : https://reward.tipbox.kr/api/participate
+- production API url : https://reward.tip-box.kr/api/participate
 - test API url : https://dev.qtbit.co.kr:8436/api/participate
 
 > **매크로 매핑 기반 파라미터 전달**
