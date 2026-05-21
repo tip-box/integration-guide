@@ -69,7 +69,7 @@ sequenceDiagram
 | result                | int           | 응답 결과 값                                | 200인 경우에만 정상, '결과 코드' 참고                                           |
 | cnt                   | int           | 캠페인 수                                  |                                                                    |
 | camp                  | array         | 캠페인 리스트                                |                                                                    |
-| camp.adGroupId        | long          | 캠페인 식별값                                |                                                                    |
+| camp.adId             | long          | 캠페인 식별값                                |                                                                    |
 | camp.os               | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                                  |
 | camp.name             | string(255)   | 캠페인명                                   |                                                                    |
 | camp.bm               | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)      |
@@ -141,7 +141,7 @@ camp -> answer_type 세부 항목
     "cnt": 2,
     "camp": [
         {
-          "adGroupId": 415405,
+          "adId": 415405,
           "name": "A 강남역 맛집 우대포 강남역점 육회 명소 퀴즈맞추기",
           "bm": 1,
           "answer_type": 201,
@@ -172,7 +172,7 @@ camp -> answer_type 세부 항목
           ]
         },
         {
-            "adGroupId": 405080,
+            "adId": 405080,
             "name": "목포 맛집 목포관광오리탕 오리탕 저장하기",
             "bm": 1,
             "answer_type": 101,
@@ -237,7 +237,7 @@ camp -> answer_type 세부 항목
 |------------|--------|------|--------------------------------------|
 | channelKey | string | O    | 매체사 채널 식별키 (매체 어드민에서 발급). 매크로 매핑 대상이 아닌 고정 파라미터입니다 |
 | userId     | string | O    | 참여 유저 식별값                            |
-| adGroupId  | long   | O    | 광고그룹 식별값                             |
+| adId(adGroupId)  | long   | O    | 광고 식별값(adGroupId는 adId 하위 호환, adId 또는 adGroupId로 전달)                             |
 | ip         | string | O    | 참여 단말기 IP                            |
 | deviceAdid | string | O    | 광고 식별자 (Android: ADID, iOS: IDFA)    |
 
