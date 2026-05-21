@@ -74,7 +74,6 @@ sequenceDiagram
 | camp.name             | string(255)   | 캠페인명                                   |                                                                    |
 | camp.bm               | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)      |
 | camp.answer_type      | int           | 정답 제출 방식                               | *아래 표 참고                                                           |
-| camp.ad_category      | string(10)    | 광고 소스 유형                               | TIP_ADS, API, S2S, ADMOB, ADFIT                                    |
 | camp.package          | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url                             |
 | camp.price            | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                                |
 | camp.price_dollar     | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                              |
