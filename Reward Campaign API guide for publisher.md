@@ -64,37 +64,37 @@ sequenceDiagram
 
 
 
-| 항목                    | 형태            | 설명                                     | 비고                                                                 |
-|-----------------------|---------------|----------------------------------------|--------------------------------------------------------------------|
-| result                | int           | 응답 결과 값                                | 200인 경우에만 정상, '결과 코드' 참고                                           |
-| cnt                   | int           | 캠페인 수                                  |                                                                    |
-| camp                  | array         | 캠페인 리스트                                |                                                                    |
-| camp.adId             | long          | 캠페인 식별값                                |                                                                    |
-| camp.os               | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                                  |
-| camp.name             | string(255)   | 캠페인명                                   |                                                                    |
-| camp.bm               | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)      |
-| camp.answer_type      | int           | 정답 제출 방식                               | *아래 표 참고                                                           |
-| camp.package          | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url                             |
-| camp.price            | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                                |
-| camp.price_dollar     | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                              |
-| camp.rewarddesc       | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                                 |
-| camp.joindesc         | string(65535) | 캠페인 참여 방법 안내                           |                                                                    |
-| camp.randomdesc       | string        | 랜덤 미션 설명                               |                                                                    |
-| camp.totalquantity    | int           | 해당 캠페인의 참여 가능한 총 수량                    | 0: 무제한                                                             |
-| camp.quantity         | int           | 해당 캠페인의 일별 참여 가능 수량(=매체사에 할당된 데일리 캡)   | 0: 무제한                                                             |
-| camp.enddate          | string(8)     | 캠페인 종료일                                | 1) 값이 있는 경우: YYYYMMDD 2) 값이 없는 경우: 별도 종료일 없음                       |
-| camp.day_event_limit  | int           | 일일 사용자당 참여 가능 횟수                       | 0: 단 한번만 참여 가능, 1: 하루 한번 참여 가능, N: 하루 N번 참여 가능                     |
-| camp.ad_event_limit   | int           | 사용자당 참여 가능 총 횟수                        |                                                                    |
-| camp.search_keyword   | string        | 검색 키워드                                 |                                                                    |
-| camp.type             | string        | 캠페인 타입 구분                              |                                                                    |
-| camp.targetcarrier    | string(1)     | 통신사 타겟팅                                | 공백: 타겟 없음, 1: KT, 2: LGU+, 3: SKT                                  |
-| camp.targetgender     | int           | 성별 타겟팅                                 | 0: 타겟 없음, 1: 남자, 2: 여자                                             |
-| camp.targetagemin     | int           | 최소 연령 타겟팅                              | 0: 타겟 없음                                                           |
-| camp.targetagemax     | int           | 최대 연령 타겟팅                              | 0: 타겟 없음                                                           |
-| camp.targetpkg        | string(100)   | 앱 패키지네임 타겟팅. AOS 캠페인일 경우에만 내려옵니다       |                                                                    |
-| camp.detargetpkg      | string(100)   | 앱 패키지네임 디타겟팅. AOS 캠페인일 경우에만 내려옵니다      |                                                                    |
-| camp.iconurl          | string(255)   | 캠페인의 아이콘 이미지 url                       |                                                                    |
-| camp.ctv              | array         | 아이콘 이미지를 제외한 가로형, 세로형 소재 정보를 포함하고 있습니다 | 세부 항목 참고                                                           |
+| 항목                   | 형태            | 설명                                     | 비고                                                           |
+|----------------------|---------------|----------------------------------------|--------------------------------------------------------------|
+| result               | int           | 응답 결과 값                                | 200인 경우에만 정상, '결과 코드' 참고                                     |
+| cnt                  | int           | 캠페인 수                                  |                                                              |
+| camp                 | array         | 캠페인 리스트                                |                                                              |
+| camp.adId            | long          | 캠페인 식별값                                |                                                              |
+| camp.os              | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                            |
+| camp.name            | string(255)   | 캠페인명                                   |                                                              |
+| camp.bm              | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM) |
+| camp.answer_type     | int           | 정답 제출 방식                               | *아래 표 참고                                                     |
+| camp.package         | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url(CPI 또는 CPE인 경우 제공)    |
+| camp.price           | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                          |
+| camp.price_dollar    | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                        |
+| camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                           |
+| camp.joindesc        | string(65535) | 캠페인 참여 방법 안내                           |                                                              |
+| camp.randomdesc      | string        | 랜덤 미션 설명                               |                                                              |
+| camp.totalquantity   | int           | 해당 캠페인의 참여 가능한 총 수량                    | 0: 무제한                                                       |
+| camp.quantity        | int           | 해당 캠페인의 일별 참여 가능 수량(=매체사에 할당된 데일리 캡)   | 0: 무제한                                                       |
+| camp.enddate         | string(8)     | 캠페인 종료일                                | 1) 값이 있는 경우: YYYYMMDD 2) 값이 없는 경우: 별도 종료일 없음                 |
+| camp.day_event_limit | int           | 일일 사용자당 참여 가능 횟수                       | 0: 단 한번만 참여 가능, 1: 하루 한번 참여 가능, N: 하루 N번 참여 가능               |
+| camp.ad_event_limit  | int           | 사용자당 참여 가능 총 횟수                        |                                                              |
+| camp.search_keyword  | string        | 검색 키워드                                 |                                                              |
+| camp.type            | string        | 캠페인 타입 구분                              |                                                              |
+| camp.targetcarrier   | string(1)     | 통신사 타겟팅                                | 공백: 타겟 없음, 1: KT, 2: LGU+, 3: SKT                            |
+| camp.targetgender    | int           | 성별 타겟팅                                 | 0: 타겟 없음, 1: 남자, 2: 여자                                       |
+| camp.targetagemin    | int           | 최소 연령 타겟팅                              | 0: 타겟 없음                                                     |
+| camp.targetagemax    | int           | 최대 연령 타겟팅                              | 0: 타겟 없음                                                     |
+| camp.targetpkg       | string(100)   | 앱 패키지네임 타겟팅. AOS 캠페인일 경우에만 내려옵니다       |                                                              |
+| camp.detargetpkg     | string(100)   | 앱 패키지네임 디타겟팅. AOS 캠페인일 경우에만 내려옵니다      |                                                              |
+| camp.iconurl         | string(255)   | 캠페인의 아이콘 이미지 url                       |                                                              |
+| camp.ctv             | array         | 아이콘 이미지를 제외한 가로형, 세로형 소재 정보를 포함하고 있습니다 | 세부 항목 참고                                                     |
 
 
 camp -> ctv 세부 항목
@@ -232,13 +232,13 @@ camp -> answer_type 세부 항목
 
 아래는 내부적으로 매핑되어야 하는 필수 필드 목록입니다. 실제 Query Parameter명은 매크로 매핑 설정에 따라 달라질 수 있습니다.
 
-| 항목         | 형태     | 필수 | 설명                                   |
-|------------|--------|------|--------------------------------------|
-| channelKey | string | O    | 매체사 채널 식별키 (매체 어드민에서 발급). 매크로 매핑 대상이 아닌 고정 파라미터입니다 |
-| userId     | string | O    | 참여 유저 식별값                            |
-| adId(adGroupId)  | long   | O    | 광고 식별값(adGroupId는 adId 하위 호환, adId 또는 adGroupId로 전달)                             |
-| ip         | string | O    | 참여 단말기 IP                            |
-| deviceAdid | string | O    | 광고 식별자 (Android: ADID, iOS: IDFA)    |
+| 항목         | 형태     | 필수 | 설명                                                   |
+|------------|--------|----|------------------------------------------------------|
+| channelKey | string | O  | 매체사 채널 식별키 (매체 어드민에서 발급). 매크로 매핑 대상이 아닌 고정 파라미터입니다   |
+| userId     | string | O  | 참여 유저 식별값                                            |
+| adId(adGroupId)      | long   | O  | 광고 식별값(adGroupId는 adId 하위 호환, adId 또는 adGroupId로 전달) |
+| ip         | string | O  | 참여 단말기 IP                                            |
+| deviceAdid | string | O  | 광고 식별자 (Android: ADID, iOS: IDFA)                    |
 
 #### 선택 파라미터
 
