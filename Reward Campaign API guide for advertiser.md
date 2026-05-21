@@ -131,7 +131,7 @@ assetMapping       : {"icon": "iconurl"}
 
 - 사용자가 정상적으로 미션에 참여해 전환이 완료된 경우 TIP-BOX로 포스트백을 발송합니다
 - method : GET
-- TIP-BOX postback URL : `https://postback.tipbox.kr/api/postback`
+- TIP-BOX postback URL : `https://reward.tip-box.kr/api/postback`
 
 > 포스트백 발송에 필요한 파라미터가 있으면 연동 담당자에게 요청해주세요.
 
@@ -146,7 +146,7 @@ assetMapping       : {"icon": "iconurl"}
 ### 예시
 
 ```
-https://postback.tipbox.kr/api/postback?clickId=abc123&callbackParam=tx_001&price=100
+https://reward.tip-box.kr/api/postback?clickId=abc123&callbackParam=tx_001&price=100
 ```
 
 ### 응답
