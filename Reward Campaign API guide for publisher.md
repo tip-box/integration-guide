@@ -337,13 +337,12 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 
 **금액 정보**
 
-| 매크로명          | 설명                   |
-|----------------|----------------------|
-| rewardPrice    | 리워드 단가               |
-| contractPrice  | 계약 단가 (원)            |
-| userPrice      | 유저 지급 금액 (원)         |
-| userPoint      | 유저 지급 포인트            |
-| profit         | 플랫폼 수익               |
+| 매크로명          | 설명           |
+|----------------|--------------|
+| mediaPrice    | 매체 지급액       |
+| profit         | 매체 수익        |
+| userPrice      | 유저 지급액 (원) |
+| userPoint      | 유저 포인트    |
 
 **디바이스 정보**
 
@@ -351,7 +350,6 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 |---------------|----------------------|
 | ip            | 참여 단말기 IP             |
 | osType        | OS 유형 (ANDROID, IOS)  |
-| platform      | 플랫폼 (osType과 동일)     |
 | osVersion     | OS 버전                |
 | deviceModel   | 단말기 모델               |
 | deviceBrand   | 단말기 제조사              |
@@ -416,7 +414,7 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
   "userId": "uid",
   "clickId": "click_id",
   "campaignId": "cid",
-  "rewardPrice": "price",
+  "mediaPrice": "price",
   "callbackParam": "cb",
   "osType": {
     "paramName": "os",
