@@ -77,9 +77,10 @@ sequenceDiagram
 | camp.package         | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url(CPI 또는 CPE인 경우 제공)    |
 | camp.price           | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                          |
 | camp.price_dollar    | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                        |
-| camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                           |
-| camp.joindesc        | string(65535) | 캠페인 참여 방법 안내                           |                                                              |
-| camp.randomdesc      | string        | 랜덤 미션 설명                               |                                                              |
+| camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내 (불필요한 태그 제거)                          | ex) 앱 설치 후 회원가입 완료                                           |
+| camp.raw_rewarddesc  | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                           |
+| camp.joindesc        | string(65535) | 캠페인 참여 방법 안내 (불필요한 태그 제거)              |                                                              |
+| camp.raw_joindesc    | string(65535) | 캠페인 참여 방법 안내                           |                                                              |
 | camp.totalquantity   | int           | 해당 캠페인의 참여 가능한 총 수량                    | 0: 무제한                                                       |
 | camp.quantity        | int           | 해당 캠페인의 일별 참여 가능 수량(=매체사에 할당된 데일리 캡)   | 0: 무제한                                                       |
 | camp.enddate         | string(8)     | 캠페인 종료일                                | 1) 값이 있는 경우: YYYYMMDD 2) 값이 없는 경우: 별도 종료일 없음                 |
@@ -148,6 +149,8 @@ camp -> answer_type 세부 항목
           "price_dollar": 0.014,
           "rewarddesc": "퀴즈 정답 입력하기",
           "joindesc": "[참여방법]\r\n1. 미션 페이지 클릭하기\r\n2. 강남역 맛집 우대포 강남역점 육회 <- 복사하기, \r\n3. 붙여넣기 후 해당 플레이스 클릭 -> 주변 -> 명소 클릭\r\n4. {명소} 1번째 장소는? 단어를 입력 하면 완료!\r\n\r\n\r\n[주의사항] \r\n이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다. \r\nWIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.",
+          "raw_rewarddesc": "퀴즈 정답 입력하기",
+          "raw_joindesc": "<p>[참여방법]</p><p>1. 미션 페이지 클릭하기<br>2. 강남역 맛집 우대포 강남역점 육회 &lt;- 복사하기,<br>3. 붙여넣기 후 해당 플레이스 클릭 -&gt; 주변 -&gt; 명소 클릭<br>4. {명소} 1번째 장소는? 단어를 입력 하면 완료!</p><p>[주의사항]</p><p>이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.<br>WIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.</p>",
           "totalquantity": 14000,
           "quantity": 2000,
           "enddate": "20240724",
@@ -179,6 +182,8 @@ camp -> answer_type 세부 항목
             "price_dollar": 0.013,
             "rewarddesc": "플레이스 저장하기",
             "joindesc": "[참여방법]\r\n1. 미션 페이지 클릭 -> 플레이스 더보기 클릭 후\r\n2. 홈 메뉴에서 플레이스 저장 하고 저장된 화면 캡쳐하기 \r\n3. 돌아와서 캡쳐화면 업로드 하면 완료! \r\n\r\n\r\n\r\n\r\n[주의사항]\r\n이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.\r\nWIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.",
+            "raw_rewarddesc": "플레이스 저장하기",
+            "raw_joindesc": "<p>[참여방법]</p><p>1. 미션 페이지 클릭 -&gt; 플레이스 더보기 클릭 후<br>2. 홈 메뉴에서 플레이스 저장 하고 저장된 화면 캡쳐하기<br>3. 돌아와서 캡쳐화면 업로드 하면 완료!</p><p>[주의사항]</p><p>이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.<br>WIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.</p>",
             "totalquantity": 6000,
             "quantity": 200,
             "enddate": "20240728",
