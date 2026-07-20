@@ -87,7 +87,6 @@ sequenceDiagram
 | camp.enddate         | string(8)     | 캠페인 종료일                                | 1) 값이 있는 경우: YYYYMMDD 2) 값이 없는 경우: 별도 종료일 없음                 |
 | camp.day_event_limit | int           | 일일 사용자당 참여 가능 횟수                       | 0: 단 한번만 참여 가능, 1: 하루 한번 참여 가능, N: 하루 N번 참여 가능               |
 | camp.ad_event_limit  | int           | 사용자당 참여 가능 총 횟수                        |                                                              |
-| camp.search_keyword  | string        | 검색 키워드                                 |                                                              |
 | camp.type            | string        | 캠페인 타입 구분                              |                                                              |
 | camp.targetcarrier   | string(1)     | 통신사 타겟팅                                | 공백: 타겟 없음, 1: KT, 2: LGU+, 3: SKT                            |
 | camp.targetgender    | int           | 성별 타겟팅                                 | 0: 타겟 없음, 1: 남자, 2: 여자                                       |
