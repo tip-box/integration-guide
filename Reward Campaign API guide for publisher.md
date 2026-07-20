@@ -73,11 +73,12 @@ sequenceDiagram
 | camp.os              | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                            |
 | camp.name            | string(255)   | 캠페인명                                   |                                                              |
 | camp.bm              | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM) |
+| camp.type            | string(7)     | 캠페인 문자열 유형                                | MISSION, CPA, CPE, CPI, CPS, CPC, CPV, CPM                   |
 | camp.answer_type     | int           | 정답 제출 방식                               | *아래 표 참고                                                     |
 | camp.package         | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url(CPI 또는 CPE인 경우 제공)    |
 | camp.price           | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                          |
 | camp.price_dollar    | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                        |
-| camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내 (불필요한 태그 제거)                          | ex) 앱 설치 후 회원가입 완료                                           |
+| camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내 (불필요한 태그 제거)              | ex) 앱 설치 후 회원가입 완료                                           |
 | camp.raw_rewarddesc  | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                           |
 | camp.joindesc        | string(65535) | 캠페인 참여 방법 안내 (불필요한 태그 제거)              |                                                              |
 | camp.raw_joindesc    | string(65535) | 캠페인 참여 방법 안내                           |                                                              |
@@ -144,6 +145,7 @@ camp -> answer_type 세부 항목
           "adGroupId": 415405,
           "name": "A 강남역 맛집 우대포 강남역점 육회 명소 퀴즈맞추기",
           "bm": 1,
+          "type": "MISSION",
           "answer_type": 201,
           "price": 20,
           "price_dollar": 0.014,
@@ -177,6 +179,7 @@ camp -> answer_type 세부 항목
             "adGroupId": 405080,
             "name": "목포 맛집 목포관광오리탕 오리탕 저장하기",
             "bm": 1,
+            "type": "MISSION",
             "answer_type": 101,
             "price": 19,
             "price_dollar": 0.013,
