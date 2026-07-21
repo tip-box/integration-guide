@@ -221,7 +221,73 @@ camp -> answer_type 세부 항목
 ```
 
 ---
-# 2.캠페인 참여 요청 API
+# 2.캠페인 노출 추적 API
+
+- 오퍼월/DA 소재가 사용자에게 노출되는 시점에 호출하여 노출을 집계합니다.
+- 노출 집계가 필요한 경우에만 선택적으로 호출하며, 참여/적립의 필수 선행 조건은 아닙니다.
+
+### 요청
+- method : GET
+- production API url : https://reward.tip-box.kr/api/impression
+- test API url : https://dev.qtbit.co.kr:8436/api/impression
+
+> **매크로 매핑 기반 파라미터 전달**
+>
+> GET 방식은 참여 요청 API와 동일하게 매체 어드민의 **채널 관리 > 매크로 설정**에서 구성한 매크로 매핑에 따라 파라미터가 처리됩니다.
+> 매체사는 자사 시스템의 파라미터명으로 값을 전달하면, TIP-BOX가 매크로 매핑 설정에 따라 내부 필드로 자동 변환합니다.
+
+#### 필수 파라미터
+
+아래는 내부적으로 매핑되어야 하는 필수 필드 목록입니다. GET의 실제 Query Parameter명은 매크로 매핑 설정에 따라 달라질 수 있습니다.
+
+| 항목                   | 형태     | 필수 | 설명                                              |
+|----------------------|--------|----|-------------------------------------------------|
+| channelKey           | string | O  | 매체사 채널 식별키 (매크로 매핑 대상이 아닌 고정 파라미터입니다)          |
+| userId               | string | O  | 참여 유저 식별값 (최대 255자)                             |
+| adId (또는 adGroupId) | long   | O  | 광고(그룹) 식별값. 둘 중 하나는 반드시 존재해야 합니다               |
+| ip                   | string | O  | 참여 단말기 IP                                       |
+| osType               | string | O  | 모바일 OS (ANDROID, IOS)                           |
+
+#### 선택 파라미터
+
+| 항목            | 형태     | 설명                     |
+|---------------|--------|------------------------|
+| osVersion     | string | OS 버전                  |
+| deviceModel   | string | 단말기 모델                 |
+| deviceBrand   | string | 단말기 제조사                |
+| deviceNetwork | string | 네트워크 타입 (WIFI, MOBILE) |
+| deviceCarrier | string | 통신사 (SKT, KT, LGU+)    |
+| deviceAdid    | string | 광고 식별자 (ADID/IDFA)     |
+| userAgent     | string | User-Agent             |
+
+### 응답
+| 항목                 | 형태     | 설명                       |
+|--------------------|--------|--------------------------|
+| status             | int    | HTTP 상태 코드               |
+| code               | string | 응답 코드 (OK)               |
+| message            | string | 응답 메시지                   |
+| data.impressionId  | string | 노출 식별값 (MongoDB ObjectId) |
+
+#### 응답 예시
+```json
+{
+    "status": 200,
+    "code": "OK",
+    "message": "ok",
+    "data": {
+        "impressionId": "507f1f77bcf86cd799439011"
+    }
+}
+```
+
+> **에러 응답**
+> - 400 : 잘못된 요청 (필수 필드 누락, 유효성 검증 실패)
+> - 404 : 광고를 찾을 수 없음
+> - 415 : 지원하지 않는 Content-Type (POST)
+> - 502 : 광고가 비활성 상태
+
+---
+# 3.캠페인 참여 요청 API
 
 
 - 광고에 참여하기 위해서는 캠페인 참여 요청 API를 호출해 참여 가능 여부를 확인해야 합니다.
