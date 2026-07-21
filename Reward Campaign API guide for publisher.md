@@ -559,7 +559,8 @@ https://publisher.com/callback?uid=user123&click_id=663f1a2b3c4d5e6f&cid=12345&p
 
 ---
 ## 공통
-- result로 반환되는 코드 목록입니다
+- 캠페인 리스트 조회 / 참여 요청 API의 `result`(또는 `status`)로 반환되는 코드 목록입니다
+- 노출 추적 API·CPI 완료 API는 각 섹션에 명시된 `code`(OK / ACCEPTED / COMPLETE_FAILED 등)와 HTTP 상태 코드를 따릅니다
 
 ### result code
 
