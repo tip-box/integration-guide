@@ -17,16 +17,24 @@ sequenceDiagram
     매체사->>TIP-BOX: 1. 캠페인 리스트 조회 요청
     TIP-BOX-->>매체사: 캠페인 리스트 응답
 
-    매체사->>TIP-BOX: 2. 캠페인 참여 요청
+    opt 노출 집계가 필요한 경우 (선택)
+        매체사->>TIP-BOX: 2. 캠페인 노출 (노출 추적 API)
+        TIP-BOX-->>매체사: impressionId 응답
+    end
+
+    매체사->>TIP-BOX: 3. 캠페인 참여 요청
     TIP-BOX-->>매체사: 랜딩 URL + clickId 응답
 
-    유저->>광고주: 3. 랜딩 URL로 이동
+    유저->>광고주: 4. 랜딩 URL로 이동
 
-    광고주->>TIP-BOX: 4. 유저 미션 완료 후 포스트백
+    opt CPI 캠페인
+        매체사->>TIP-BOX: 5. 설치 완료 통보 (CPI 완료 API)
+        TIP-BOX->>광고주: 광고주 통보 → 인바운드 포스트백
+    end
 
-    TIP-BOX->>매체사: 5. 매체사 콜백 (실적 전송)
+    TIP-BOX->>매체사: 6. 매체사 콜백 (실적 전송)
 
-    매체사->>유저: 6. 리워드 지급
+    매체사->>유저: 7. 리워드 지급
 ```
 
 ### Prerequisites
