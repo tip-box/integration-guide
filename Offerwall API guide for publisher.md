@@ -73,23 +73,24 @@ sequenceDiagram
 | cnt                  | int           | 캠페인 수                                  |                                                                                                             |
 | camp                 | array         | 캠페인 리스트                                |                                                                                                             |
 | camp.adGroupId       | long          | 캠페인 식별값                                |                                                                                                             |
-| camp.os              | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                                                                           |
+| camp.os              | string        | 모바일 OS                                 | ANDROID, IOS. p를 지정하지 않으면 동일 캠페인의 OS별 광고가 하나로 합쳐져 `ANDROID,IOS` 형태로 내려올 수 있습니다              |
 | camp.name            | string(255)   | 캠페인명                                   |                                                                                                             |
 | camp.bm              | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)                                                |
 | camp.type            | string(7)     | 캠페인 문자열 유형                                | MISSION, CPA, CPE, CPI, CPS, CPC, CPV, CPM                                                                  |
 | camp.answer_type     | int           | 정답 제출 방식                               | *아래 표 참고<br/>예시: 101 저장하기(스크린샷) 102 저장하기(텍스트), 201 퀴즈맞추기(텍스트 쇼핑), 202 퀴즈맞추기(텍스트 장소), ... 601 SNS(인스타그램 팔로우) |
 | camp.package         | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url(CPI 또는 CPE인 경우 제공)                                                   |
-| camp.price           | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                                                                         |
-| camp.price_dollar    | double        | 캠페인 집행 단가 (=매체비, USD)                  | 0.014                                                                                                       |
+| camp.price           | int           | 캠페인 단가                                 | 매체 채널에 설정된 요율이 적용된 값                                                                                    |
+| camp.price_dollar    | double        | 캠페인 단가 (USD)                           | 현재 미제공 (항상 0)                                                                                              |
 | camp.rewarddesc      | string(50)    | 캠페인 적립 조건 안내 (불필요한 태그 제거)              | ex) 앱 설치 후 회원가입 완료                                                                                          |
 | camp.raw_rewarddesc  | string(50)    | 캠페인 적립 조건 안내                           | ex) 앱 설치 후 회원가입 완료                                                                                          |
 | camp.joindesc        | string(65535) | 캠페인 참여 방법 안내 (불필요한 태그 제거)              |                                                                                                             |
 | camp.raw_joindesc    | string(65535) | 캠페인 참여 방법 안내                           |                                                                                                             |
-| camp.totalquantity   | int           | 해당 캠페인의 참여 가능한 총 수량                    | 0: 무제한                                                                                                      |
-| camp.quantity        | int           | 해당 캠페인의 일별 참여 가능 수량(=매체사에 할당된 데일리 캡)   | 0: 무제한                                                                                                      |
+| camp.totalquantity   | int           | 해당 캠페인의 총 예산 (원)                       | 참여 가능 수량이 아닌 예산 금액입니다. 미설정 시 null                                                                         |
+| camp.quantity        | int           | 해당 캠페인의 일 예산 (원)                       | 참여 가능 수량이 아닌 예산 금액입니다. 미설정 시 null. 일별 참여 가능 수량은 `daily_cap` 을 사용해주세요                                 |
+| camp.daily_cap       | int           | 오늘 해당 매체가 참여 가능한 남은 수량                  | 0: 일일 한도 미설정 (일일 한도가 소진된 캠페인은 리스트에서 제외됩니다)                                                         |
 | camp.enddate         | string(8)     | 캠페인 종료일                                | 1) 값이 있는 경우: YYYYMMDD 2) 값이 없는 경우: 별도 종료일 없음                                                                |
-| camp.day_event_limit | int           | 일일 사용자당 참여 가능 횟수                       | 0: 단 한번만 참여 가능, 1: 하루 한번 참여 가능, N: 하루 N번 참여 가능                                                              |
-| camp.ad_event_limit  | int           | 사용자당 참여 가능 총 횟수                        |                                                                                                             |
+| camp.day_event_limit | int           | 일일 사용자당 참여 가능 횟수                       | `ad_event_limit` 가 1일 때만 적용. 0: 무제한, N: 하루 N번 참여 가능 (직전 참여 후 24시간÷N 이내 재참여 불가, 자정에 초기화) |
+| camp.ad_event_limit  | int           | 중복 참여 허용 여부                            | 0: 중복 참여 불가 (사용자당 1회), 1: 중복 참여 허용 (`day_event_limit` 규칙 적용)                                             |
 | camp.targetcarrier   | string(1)     | 통신사 타겟팅                                | 공백: 타겟 없음, 1: KT, 2: LGU+, 3: SKT                                                                           |
 | camp.targetgender    | int           | 성별 타겟팅                                 | 0: 타겟 없음, 1: 남자, 2: 여자                                                                                      |
 | camp.targetagemin    | int           | 최소 연령 타겟팅                              | 0: 타겟 없음                                                                                                    |
@@ -144,18 +145,20 @@ camp -> answer_type 세부 항목
     "camp": [
         {
           "adGroupId": 415405,
+          "os": "ANDROID",
           "name": "A 강남역 맛집 우대포 강남역점 육회 명소 퀴즈맞추기",
           "bm": 1,
           "type": "MISSION",
           "answer_type": 201,
           "price": 20,
-          "price_dollar": 0.014,
+          "price_dollar": 0,
           "rewarddesc": "퀴즈 정답 입력하기",
           "joindesc": "[참여방법]\r\n1. 미션 페이지 클릭하기\r\n2. 강남역 맛집 우대포 강남역점 육회 <- 복사하기, \r\n3. 붙여넣기 후 해당 플레이스 클릭 -> 주변 -> 명소 클릭\r\n4. {명소} 1번째 장소는? 단어를 입력 하면 완료!\r\n\r\n\r\n[주의사항] \r\n이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다. \r\nWIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.",
           "raw_rewarddesc": "퀴즈 정답 입력하기",
           "raw_joindesc": "<p>[참여방법]</p><p>1. 미션 페이지 클릭하기<br>2. 강남역 맛집 우대포 강남역점 육회 &lt;- 복사하기,<br>3. 붙여넣기 후 해당 플레이스 클릭 -&gt; 주변 -&gt; 명소 클릭<br>4. {명소} 1번째 장소는? 단어를 입력 하면 완료!</p><p>[주의사항]</p><p>이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.<br>WIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.</p>",
           "totalquantity": 14000,
           "quantity": 2000,
+          "daily_cap": 150,
           "enddate": "20240724",
           "targetcarrier": "",
           "targetgender": 0,
@@ -163,7 +166,8 @@ camp -> answer_type 세부 항목
           "targetagemax": 0,
           "targetpkg": "",
           "detargetpkg": "",
-          "ad_event_limit": 9999,
+          "ad_event_limit": 0,
+          "day_event_limit": 1,
           "iconurl": "https://webapp.superap.io/res/quiz_icon.png",
           "ctv": [
             {
@@ -178,18 +182,20 @@ camp -> answer_type 세부 항목
         },
         {
             "adGroupId": 405080,
+            "os": "ANDROID,IOS",
             "name": "목포 맛집 목포관광오리탕 오리탕 저장하기",
             "bm": 1,
             "type": "MISSION",
             "answer_type": 101,
             "price": 19,
-            "price_dollar": 0.013,
+            "price_dollar": 0,
             "rewarddesc": "플레이스 저장하기",
             "joindesc": "[참여방법]\r\n1. 미션 페이지 클릭 -> 플레이스 더보기 클릭 후\r\n2. 홈 메뉴에서 플레이스 저장 하고 저장된 화면 캡쳐하기 \r\n3. 돌아와서 캡쳐화면 업로드 하면 완료! \r\n\r\n\r\n\r\n\r\n[주의사항]\r\n이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.\r\nWIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.",
             "raw_rewarddesc": "플레이스 저장하기",
             "raw_joindesc": "<p>[참여방법]</p><p>1. 미션 페이지 클릭 -&gt; 플레이스 더보기 클릭 후<br>2. 홈 메뉴에서 플레이스 저장 하고 저장된 화면 캡쳐하기<br>3. 돌아와서 캡쳐화면 업로드 하면 완료!</p><p>[주의사항]</p><p>이미 참여한 이력이 있다면 리워드가 지급되지 않을 수 있습니다.<br>WIFI가 아닌 환경에서는 데이터 이용료가 발생할 수 있습니다.</p>",
             "totalquantity": 6000,
             "quantity": 200,
+            "daily_cap": 0,
             "enddate": "20240728",
             "targetcarrier": "",
             "targetgender": 0,
@@ -198,6 +204,7 @@ camp -> answer_type 세부 항목
             "targetpkg": "",
             "detargetpkg": "",
             "ad_event_limit": 1,
+            "day_event_limit": 1,
             "iconurl": "https://webapp.superap.io/res/place_icon.png",
             "ctv": [
               {
