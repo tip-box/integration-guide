@@ -88,7 +88,8 @@ sequenceDiagram
 | camp.os              | string(7)     | 모바일 OS                                 | android, ios, WEB (WEB은 모든 OS 호환)                                                                           |
 | camp.name            | string(255)   | 캠페인명                                   |                                                                                                             |
 | camp.bm              | int           | 캠페인 유형                                 | 1: CPA/MISSION, 2: CPE, 3: CPI, 4: CPS, 0: 기타(CPC, CPV, CPM)                                                |
-| camp.type            | string(7)     | 캠페인 문자열 유형                                | MISSION, CPA, CPE, CPI, CPS, CPC, CPV, CPM                                                                  |
+| camp.type            | string(7)     | 캠페인 문자열 유형                             | MISSION, CPA, CPE, CPI, CPS, CPC, CPV, CPM                                                                  |
+| camp.sub_type        | int     | 캠페인 하위 유형(bm 값이 1인 경우)                 | 0: 기본, 1: 플레이스 저장하기, 2: 퀴즈 맞추기, 3: 스토어상품 찜하기, 4: 스토어 알람받기, 5: 유튜브, 6: SNS                                   |
 | camp.answer_type     | int           | 정답 제출 방식                               | *아래 표 참고<br/>예시: 101 저장하기(스크린샷) 102 저장하기(텍스트), 201 퀴즈맞추기(텍스트 쇼핑), 202 퀴즈맞추기(텍스트 장소), ... 601 SNS(인스타그램 팔로우) |
 | camp.package         | string(100)   | 패키지네임 또는 url scheme                    | android: package name, iOS: custom url(CPI 또는 CPE인 경우 제공)                                                   |
 | camp.price           | int           | 캠페인 집행 단가 (=매체비)                       | 100                                                                                                         |
@@ -160,6 +161,7 @@ camp -> answer_type 세부 항목
           "name": "A 강남역 맛집 우대포 강남역점 육회 명소 퀴즈맞추기",
           "bm": 1,
           "type": "MISSION",
+          "sub_type": 2,
           "answer_type": 201,
           "price": 20,
           "price_dollar": 0.014,
@@ -194,6 +196,7 @@ camp -> answer_type 세부 항목
             "name": "목포 맛집 목포관광오리탕 오리탕 저장하기",
             "bm": 1,
             "type": "MISSION",
+            "sub_type": 1,
             "answer_type": 101,
             "price": 19,
             "price_dollar": 0.013,
