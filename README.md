@@ -2,7 +2,8 @@
 
 
 ## For Publisher
-- Reward Campaign API guide [[kor]](Reward%20Campaign%20API%20guide%20for%20publisher.md)
+- Offerwall API guide [[kor]](Offerwall%20API%20guide%20for%20publisher.md)
+- DA API guide [[kor]](DA%20API%20guide%20for%20publisher.md)
 
 ## For Advertiser
 - Reward Campaign API guide [[kor]](Reward%20Campaign%20API%20guide%20for%20advertiser.md)

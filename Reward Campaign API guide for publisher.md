@@ -1,5 +1,12 @@
 # Reward Campaign API guide for publisher
 
+> **⚠️ 본 가이드는 오퍼월 / DA 가이드로 분리되었습니다. 아래 문서를 참고해주세요.**
+>
+> - 오퍼월 연동 : [Offerwall API guide for publisher](Offerwall%20API%20guide%20for%20publisher.md)
+> - DA(디스플레이) 연동 : [DA API guide for publisher](DA%20API%20guide%20for%20publisher.md)
+>
+> 본 문서는 이전 연동 참고용으로만 유지되며, 이후 변경 사항은 분리된 두 문서에만 반영됩니다.
+
 ### Getting Started
 
 - 본 가이드는 TIP-BOX와 매체사 API 연동에 대한 내용입니다
