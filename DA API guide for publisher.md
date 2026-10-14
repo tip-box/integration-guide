@@ -48,14 +48,18 @@ sequenceDiagram
 - production API url : https://ad.tip-box.kr/api/v1/reward/display/campaigns
 - test API url : http://dev.qtbit.co.kr:8037/api/v1/reward/display/campaigns
 
-- parameter : channelKey (필수), p (선택)
+- parameter : channelKey (필수), p (선택), inventoryType (선택)
 
 
 | 항목         | 설명      | 필수 | 비고                                                                         |
 |------------|---------|----|----------------------------------------------------------------------------|
 | channelKey | 매체사 채널 식별키 | O  | 매체 어드민에서 채널 승인 시 발급                                                       |
 | p        | 플랫폼     |    | 기본 값은 전체이며, 구분하여 받을 경우 Android : 1, iOS : 2로 요청 (그 외 값은 오류)            |
+| inventoryType | 배너 유형 |    | 기본 값은 전체이며, 구분하여 받을 경우 FRONT_BANNER(전면), BOX_BANNER(박스), STICKY_BANNER(띠)로 요청. 대소문자 무관 (그 외 값은 오류). 아래 "배너 유형 필터" 참고 |
 - 요청 예시 : https://ad.tip-box.kr/api/v1/reward/display/campaigns?channelKey={channelKey}
+- 배너 유형 지정 요청 예시 : https://ad.tip-box.kr/api/v1/reward/display/campaigns?channelKey={channelKey}&inventoryType=BOX_BANNER
+
+> 파라미터 이름은 `inventoryType`(camelCase)입니다. 응답 필드 이름인 `inventory_type`(snake_case)으로 보내면 인식되지 않아 **오류 없이 전체 목록이 응답**됩니다.
 
 > 응답에는 본 문서에 기재되지 않은 필드가 포함될 수 있으며, 매체사는 이를 무시해야 합니다.
 
@@ -74,13 +78,14 @@ sequenceDiagram
 | camp.enddate         | string(8)     | 캠페인 종료일                                | YYYYMMDD                                                                                                    |
 | camp.iconurl         | string(255)   | 캠페인의 아이콘 이미지 url                       | DA 캠페인은 아이콘이 없을 수 있으며, 이 경우 null                                                                       |
 | camp.ctv             | array         | 배너 소재 정보                               | 세부 항목 참고. 소재가 없으면 빈 배열                                                                                 |
+| camp.inventory_type  | string        | 배너 유형                                  | FRONT_BANNER, BOX_BANNER, STICKY_BANNER, HOME_NOTICE_BANNER, NONE. inventoryType 을 지정하면 요청한 유형, 지정하지 않으면 캠페인에 등록된 유형. 등록된 유형이 없으면 필드가 생략됩니다 |
 
 
 camp -> ctv 세부 항목
 
 | 항목   | 형태          | 설명                            |
 |------|-------------|-------------------------------|
-| type | int         | 배너 규격 코드 (아래 표 참고)            |
+| type | int         | 배너 규격 코드 (아래 표 참고). 규격 정보가 없는 소재는 null |
 | url  | string(255) | 소재 url                        |
 
 ctv.type 배너 규격
@@ -94,6 +99,21 @@ ctv.type 배너 규격
 
 - `ctv.type` 은 소재 이미지의 규격(비율)을 나타내는 코드입니다. 지면 위치(전면/박스/띠 등)를 지정하는 값이 아니므로, 매체사는 자사 지면 규격에 맞는 type의 소재를 선택해 사용해주세요.
 - 한 캠페인에 모든 규격의 소재가 있는 것은 아닙니다. 필요한 규격이 없는 캠페인은 노출하지 않거나 다른 규격으로 대체해주세요.
+
+#### 배너 유형 필터 (inventoryType)
+
+`inventoryType` 을 지정하면 해당 지면에 맞는 캠페인만 응답합니다. 배너 유형과 `ctv.type` 의 대응은 아래와 같습니다.
+
+| inventoryType | 지면 | 대응 ctv.type |
+|---------------|------|---------------|
+| FRONT_BANNER  | 전면 배너 | 2 (720*780), 3 (640*960) |
+| BOX_BANNER    | 박스 배너 | 1 (1200*600) |
+| STICKY_BANNER | 띠 배너   | 4 (640*100) |
+
+- 규격 정보가 있는 소재를 가진 캠페인은 대응 규격의 소재가 있을 때만 응답에 포함되며, `ctv` 에는 **대응 규격의 소재만** 남습니다.
+- 규격 정보가 있는 소재가 없는 캠페인은 등록된 배너 유형이 요청한 유형과 같을 때 포함되며, `ctv` 는 그대로 응답됩니다.
+- `inventoryType` 을 지정하지 않으면 필터 없이 전체 캠페인을 응답합니다. 이때 `camp.inventory_type` 은 등록된 값을 그대로 전달하는 것이므로, 지면에 맞는 소재 선택은 `ctv.type` 을 기준으로 해주세요.
+- `HOME_NOTICE_BANNER`·`NONE` 은 응답 값으로만 쓰이며, `inventoryType` 요청 값으로 보내면 오류(400)로 처리됩니다.
 
 
 #### 응답 예시
@@ -111,6 +131,7 @@ ctv.type 배너 규격
             "daily_cap": 500,
             "enddate": "20261231",
             "iconurl": null,
+            "inventory_type": "FRONT_BANNER",
             "ctv": [
                 {
                     "type": 1,
@@ -130,7 +151,7 @@ ctv.type 배너 규격
 >
 > 에러가 발생해도 HTTP 상태 코드는 200으로 응답하며, 응답 본문에 `result` 대신 `status`·`code`·`message` 가 내려갑니다.
 > - 201 : channelKey 누락 (`INVALID_TOKEN`)
-> - 400 : 잘못된 요청 (`BAD_REQUEST` p 값 오류, `CHANNEL_TYPE_MISMATCH` DA 타입이 아닌 채널)
+> - 400 : 잘못된 요청 (`BAD_REQUEST` p 값 또는 inventoryType 값 오류, `CHANNEL_TYPE_MISMATCH` DA 타입이 아닌 채널)
 > - 405 : 등록되지 않은 channelKey (`MEDIA_NOT_FOUND`)
 
 ---

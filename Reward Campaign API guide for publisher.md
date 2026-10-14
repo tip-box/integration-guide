@@ -65,7 +65,7 @@ sequenceDiagram
 - production API url : https://ad.tip-box.kr/api/v1/reward/display/campaigns
 - test API url : http://dev.qtbit.co.kr:8037/api/v1/reward/display/campaigns
 
-> 파라미터 및 응답 스펙은 두 API 동일합니다.
+> 파라미터 및 응답 스펙은 두 API 동일합니다. 단, DA 전용 파라미터 `inventoryType` 과 응답 필드 `camp.inventory_type` 은 DA API 에만 있습니다(오퍼월 API 는 `inventoryType` 을 무시합니다). 상세는 [DA API guide for publisher](DA%20API%20guide%20for%20publisher.md) 를 참고해주세요.
 
 - parameter : channelKey (필수), p (선택)
 
