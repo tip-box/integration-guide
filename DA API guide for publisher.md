@@ -323,10 +323,139 @@ https://reward.tip-box.kr/api/impression?channelKey={channelKey}&uid=user123&ad=
 
 - 광고주로부터 전환(실적)이 확정되면, 채널에 등록된 콜백 URL로 매체사 서버에 실적을 전송합니다 (폐사에서 직접 적립 처리하지 않습니다)
 - 클릭(참여 요청)만으로는 콜백이 전송되지 않습니다. 전환이 확정된 클릭에 대해서만 전송됩니다.
+- 실적 콜백을 받을 콜백 URL은 매체 어드민의 채널 설정에서 등록합니다
 - 콜백은 HTTP GET 또는 POST 방식으로 전송됩니다 (매체사 설정에 따라 결정)
-- 콜백 URL·매크로 매핑 설정 방법과 사용 가능한 매크로 목록은 오퍼월 가이드와 동일합니다. [Offerwall API guide for publisher - 5.실적 전송 (콜백)](Offerwall%20API%20guide%20for%20publisher.md#5실적-전송-콜백) 을 참고해주세요.
-- DA 캠페인의 콜백에서 `adFormat` 매크로 값은 `DISPLAY` 입니다.
-- `clickId` 매크로는 섹션 3 응답의 `clickId`, `callbackParam` 매크로는 섹션 3 요청 시 전달한 값입니다.
+
+### 콜백 매크로
+
+TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설정할 수 있습니다.
+매체사의 콜백 URL과 매크로 매핑은 매체 어드민의 **채널 관리 > 매크로 설정**에서 설정하며, 아래의 매크로를 사용할 수 있습니다.
+
+> 매체사의 기존 콜백 스펙에 맞추어 파라미터명과 값을 자유롭게 매핑할 수 있습니다.
+
+![매체 어드민 매크로 설정 화면](asset/admin-macro-setting.png)
+
+#### 사용 가능한 매크로 목록
+
+**식별 정보**
+
+| 매크로명        | 설명                    |
+|---------------|-----------------------|
+| clickId       | 클릭 트래킹 ID. 섹션 3 응답의 `clickId` 와 동일한 값 |
+| userId        | 참여 유저 식별값             |
+| affiliateId   | 하위 매체 아이디             |
+| mediaId       | 매체 계정 ID              |
+| deviceAdid    | 광고 식별자 (ADID/IDFA)    |
+| callbackParam | 매체사 정의 파라미터. 섹션 3 요청 시 전달한 값 |
+
+**캠페인 정보**
+
+| 매크로명          | 설명                   |
+|----------------|----------------------|
+| campaignId     | 캠페인 ID               |
+| adGroupId      | 광고그룹 ID. 섹션 1 응답의 `camp.adGroupId` 와 동일한 값 |
+| adFormat       | 광고 형식 (DA 캠페인은 `display`) |
+| adType         | 광고 유형 (소문자로 전달. 예: `cpc`, `cpm`) |
+
+**금액 정보**
+
+| 매크로명          | 설명           |
+|----------------|--------------|
+| mediaPrice    | 매체 지급액       |
+| profit         | 매체 수익        |
+| userPrice      | 유저 지급액 (원) |
+| userPoint      | 유저 포인트    |
+
+**디바이스 정보**
+
+| 매크로명         | 설명                   |
+|---------------|----------------------|
+| ip            | 참여 단말기 IP             |
+| osType        | OS 유형 (ANDROID, IOS)  |
+| platform      | OS 유형 (osType 과 동일한 값) |
+| osVersion     | OS 버전                |
+| deviceModel   | 단말기 모델               |
+| deviceBrand   | 단말기 제조사              |
+| deviceCarrier | 통신사                  |
+| deviceNetwork | 네트워크 타입              |
+| userAgent     | User-Agent            |
+
+**유저 정보**
+
+| 매크로명   | 설명     |
+|---------|--------|
+| age     | 유저 연령  |
+| gender  | 유저 성별  |
+
+**기타**
+
+| 매크로명           | 설명                   |
+|-----------------|----------------------|
+| clickTimestamp   | 클릭 시각 (KST epoch)   |
+
+- 값이 없는 매크로는 빈 문자열로 전달됩니다 (금액 매크로는 `0`).
+
+#### 동적 매크로 매핑 방식
+
+매크로 매핑은 JSON 형태로 설정되며, 두 가지 방식을 지원합니다.
+
+**1) 단순 매핑** : 매크로 값을 그대로 파라미터에 전달
+
+```json
+{
+  "userId": "uid",
+  "clickId": "click_id",
+  "profit": "pft"
+}
+```
+- 형식 : `"매크로명": "파라미터명"`
+- 위 설정시 콜백 URL에 `uid={userId값}&click_id={clickId값}&pft={profit값}` 형태로 전달됩니다
+
+**2) 열거형 매핑** : 매크로 값을 매체사에서 사용하는 코드값으로 변환하여 전달
+
+```json
+{
+  "osType": {
+    "paramName": "os",
+    "values": {
+      "IOS": "1",
+      "ANDROID": "2"
+    }
+  }
+}
+```
+- 형식 : `"매크로명": { "paramName": "파라미터명", "values": { "원래값": "변환값" } }`
+- 위 설정시 OS가 IOS인 경우 `os=1`, ANDROID인 경우 `os=2`로 전달됩니다
+
+#### 동적 매크로 설정 예시
+
+아래는 DA 채널의 콜백 URL과 매크로 매핑의 전체 예시입니다.
+
+**콜백 URL** : `https://publisher.com/callback`
+
+**매크로 매핑 설정** :
+```json
+{
+  "userId": "uid",
+  "clickId": "click_id",
+  "adGroupId": "ad",
+  "adFormat": "fmt",
+  "mediaPrice": "price",
+  "callbackParam": "cb",
+  "osType": {
+    "paramName": "os",
+    "values": {
+      "IOS": "1",
+      "ANDROID": "2"
+    }
+  }
+}
+```
+
+**실제 전송되는 콜백 URL** :
+```
+https://publisher.com/callback?uid=user123&click_id=663f1a2b3c4d5e6f&ad=12345&fmt=display&price=100&cb=my_param&os=2
+```
 
 ---
 ## 공통

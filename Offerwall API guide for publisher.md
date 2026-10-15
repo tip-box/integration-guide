@@ -470,9 +470,8 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 |----------------|----------------------|
 | campaignId     | 캠페인 ID               |
 | adGroupId      | 광고그룹 ID              |
-| adFormat       | 광고 형식 (오퍼월 캠페인은 OFFERWALL) |
-| adType         | 광고 유형 (CPI, CPE, CPA, MISSION, CPS, CPC, CPV, CPM) |
-| mediaName      | 매체사명                 |
+| adFormat       | 광고 형식 (오퍼월 캠페인은 `offerwall`) |
+| adType         | 광고 유형. 소문자로 전달 (`cpi`, `cpe`, `cpa`, `mission`, `cps`, `cpc`, `cpv`, `cpm`) |
 
 **금액 정보**
 
@@ -489,6 +488,7 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 |---------------|----------------------|
 | ip            | 참여 단말기 IP             |
 | osType        | OS 유형 (ANDROID, IOS)  |
+| platform      | OS 유형 (osType 과 동일한 값) |
 | osVersion     | OS 버전                |
 | deviceModel   | 단말기 모델               |
 | deviceBrand   | 단말기 제조사              |
@@ -508,6 +508,8 @@ TIP-BOX는 매체사별로 콜백 URL의 파라미터 구성을 동적으로 설
 | 매크로명           | 설명                   |
 |-----------------|----------------------|
 | clickTimestamp   | 클릭 시각 (KST epoch)   |
+
+- 값이 없는 매크로는 빈 문자열로 전달됩니다 (금액 매크로는 `0`).
 
 #### 동적 매크로 매핑 방식
 
